@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Port Awareness</title>
+  </head>
+  <body>
+    <h1>
+      This ecommerce mecca is being served on port:
+      <span id="portNumber"></span>
+    </h1>
+
+    <script>
+      document.getElementById("portNumber").innerText =
+        window.location.port || "unknown";
+    </script>
+  </body>
+</html>

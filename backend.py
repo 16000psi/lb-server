@@ -5,9 +5,9 @@ import subprocess
 class Handler:
     server_ports = [
         1000,
-        # 1001,
-        # 1002,
-        # 1003
+        1001,
+        1002,
+        1003
     ]
 
     @classmethod
