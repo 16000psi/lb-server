@@ -9,7 +9,6 @@ class Handler:
         # 1002,
         # 1003
     ]
-    server_processes = []
 
     @classmethod
     def handle(cls):
