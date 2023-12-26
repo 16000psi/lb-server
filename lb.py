@@ -1,28 +1,38 @@
-from http.server import BaseHTTPRequestHandler, HTTPServer
+import asyncio
+
+from aiohttp import ClientSession, web
 
 
-class SimpleRequestHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
+async def handle(request):
+    path = request.path
+    print(f"Received request at path: {path}")
+    print(request.method, request.path, "HTTP/1.1")
+    for header, value in request.headers.items():
+        print(f"{header}: {value}")
 
-        self.send_header("Content-type", "text/html")
-        self.end_headers()
+    target_server_url = "http://localhost:1000"
+    target_url = f"{target_server_url}{path}"
 
-        message = f"Received request at path: {self.path}"
-        self.wfile.write(bytes(message, "utf8"))
-        print(message)
-        print(self.requestline)
-        for header in self.headers:
-            print(f"{header}: {self.headers[header]}")
+    async with ClientSession() as session:
+        async with session.get(target_url) as response:
+            return web.Response(
+                text=f"Received request at path: {path}\n{await response.text()}",
+                status=response.status,
+                headers=response.headers,
+            )
 
 
+async def main():
+    app = web.Application()
+    app.router.add_get("/", handle)
+    runner = web.AppRunner(app)
+    await runner.setup()
+    site = web.TCPSite(runner, "0.0.0.0", 999)
+    await site.start()
 
-def run(server_class=HTTPServer, handler_class=SimpleRequestHandler, port=999):
-    server_address = ("", port)
-    httpd = server_class(server_address, handler_class)
-    print(f"Server is listening on port {port}")
-    httpd.serve_forever()
+    print("Server is listening on port 999")
+    await asyncio.Event().wait()
 
 
 if __name__ == "__main__":
-    run()
+    asyncio.run(main())
