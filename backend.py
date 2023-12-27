@@ -4,10 +4,10 @@ import subprocess
 
 class Handler:
     server_ports = [
-        1000,
-        1001,
-        1002,
-        1003
+        2000,
+        2001,
+        2002,
+        2003
     ]
 
     @classmethod
@@ -51,7 +51,7 @@ class Handler:
 
     @classmethod
     def start_server(cls, port):
-        command = f"python -m http.server {port}"
+        command = f"python server.py {port}"
         subprocess.Popen(command, shell=True)
 
 
