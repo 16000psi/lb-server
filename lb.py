@@ -10,7 +10,7 @@ async def handle(request):
     for header, value in request.headers.items():
         print(f"{header}: {value}")
 
-    target_server_url = "http://localhost:1000"
+    target_server_url = "http://localhost:2000"
     target_url = f"{target_server_url}{path}"
 
     async with ClientSession() as session:
@@ -30,7 +30,7 @@ async def main():
     site = web.TCPSite(runner, "0.0.0.0", 1999)
     await site.start()
 
-    print("Server is listening on port 999")
+    print("Server is listening on port 1999")
     await asyncio.Event().wait()
 
 
