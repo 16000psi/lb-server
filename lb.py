@@ -1,20 +1,11 @@
 import asyncio
+from itertools import cycle
 
 from aiohttp import ClientSession, web
 
 PORT_LIST = [2000, 2001, 2002, 2003]
-LAST_PORT = 3
 
-
-def get_port():
-    global PORT_LIST, LAST_PORT
-    if LAST_PORT == 3:
-        LAST_PORT = 0
-
-    else:
-        LAST_PORT = LAST_PORT + 1
-
-    return PORT_LIST[LAST_PORT]
+port_cycle = cycle(PORT_LIST)
 
 
 async def handle(request):
@@ -24,7 +15,9 @@ async def handle(request):
     for header, value in request.headers.items():
         print(f"{header}: {value}")
 
-    target_server_url = f"http://localhost:{get_port()}"
+    target_port = next(port_cycle)
+
+    target_server_url = f"http://localhost:{target_port}"
     target_url = f"{target_server_url}{path}"
 
     async with ClientSession() as session:
